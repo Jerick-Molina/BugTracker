@@ -1,0 +1,3 @@
+[submodule "profBlogger-frontend"]
+	path = profBlogger-frontend
+	url = https://github.com/Jerick-Molina/profBlogger-frontend.git
