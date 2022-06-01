@@ -8,10 +8,11 @@ public class BlogPostModule {
     
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public int Id {get;set;}
-    public string Author {get;set;}
-    public String Title {get;set;}
-    public String BlogPost {get;set;}
+    public string Id {get;set;}
+    public string Author {get;set;} 
+    public string Title {get;set;} 
+    public DateTime DatePosted {get;set;}
+    public string BlogPost {get;set;} 
     public int ThumbsUp {get;set;}
 
 }

@@ -9,39 +9,50 @@ using MongoDB;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-
+using Backend.Modules;
+using Backend.csScripts;
 namespace Backend.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 public class MongoDBController : ControllerBase
 {
-       public class Users{
-
-            [BsonId]
-            [BsonRepresentation(BsonType.ObjectId)]
-            public string _id {get;set;}
-            public string blogs {get;set;}
-        }
-
-    
+      
     
 
-    [HttpGet()]
-    public async Task<IActionResult> Get()
-    {
-          string connectionString = "";
-            string db = "Users";
+        string connectionString = "";
+            string db = "TestDB";
             string cName = "user";
 
-            var client = new MongoClient(connectionString);
-            var ddb = client.GetDatabase(db);
-            var collec = ddb.GetCollection<Users>(cName);
+    // [HttpGet("AddThingy")]
+    // public async Task<IActionResult> Add()
+    // {
 
-            var t = new Users();
-             var r = await collec.FindAsync(_ => true);
+    // var test = new  UserModule();
+    //    test.LastName = "poop";
+
+    //     string connectionString = "mongodb://AdminJerick:Mixon9090!@192.168.3.139:27017/?authSource=admin";
+    //         string db = "TestDB";
+    //         string cName = "user";
+
+    //         var client = new MongoClient(connectionString);
+    //         var ddb = client.GetDatabase(db);
+    //         var collec = ddb.GetCollection<UserModule>(cName);
+
+    //         await collec.InsertOneAsync(test);
+
+    //     return new OkObjectResult("Success");  
+    // }
 
 
-            return new OkObjectResult(r.ToList());
+
+
+     [HttpGet()]
+    public async Task<IActionResult> Get()
+    {
+            var dbConnect = new MongoDBConnection<UserModule>(cName,db);   
+            var r = await dbConnect.GetAllResults();
+            return new OkObjectResult(r); 
     }
+    
 }
