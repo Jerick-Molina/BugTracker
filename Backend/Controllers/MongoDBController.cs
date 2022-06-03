@@ -21,38 +21,38 @@ public class MongoDBController : ControllerBase
     
 
         string connectionString = "";
+        string db = "TestDB";
+        string cName = "user";
+
+    [HttpGet("AddThingy")]
+    public async Task<IActionResult> Add()
+    {
+
+    var test = new  UserModule();
+        test.FirstName = "Mike";
+       test.LastName = "Johnson";
+      
+        string connectionString = "mongodb://AdminJerick:Mixon9090!@192.168.3.139:27017/?authSource=admin";
             string db = "TestDB";
             string cName = "user";
 
-    // [HttpGet("AddThingy")]
-    // public async Task<IActionResult> Add()
-    // {
+            var client = new MongoClient(connectionString);
+            var ddb = client.GetDatabase(db);
+            var collec = ddb.GetCollection<UserModule>(cName);
 
-    // var test = new  UserModule();
-    //    test.LastName = "poop";
+            await collec.InsertOneAsync(test);
 
-    //     string connectionString = "mongodb://AdminJerick:Mixon9090!@192.168.3.139:27017/?authSource=admin";
-    //         string db = "TestDB";
-    //         string cName = "user";
-
-    //         var client = new MongoClient(connectionString);
-    //         var ddb = client.GetDatabase(db);
-    //         var collec = ddb.GetCollection<UserModule>(cName);
-
-    //         await collec.InsertOneAsync(test);
-
-    //     return new OkObjectResult("Success");  
-    // }
+        return new OkObjectResult("Success");  
+    }
 
 
 
 
-     [HttpGet()]
+    [HttpGet()]
     public async Task<IActionResult> Get()
     {
-            var dbConnect = new MongoDBConnection<UserModule>(cName,db);   
-            var r = await dbConnect.GetAllResults();
-            return new OkObjectResult(r); 
+          
+            return new OkObjectResult("Test"); 
     }
     
 }
