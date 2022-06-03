@@ -32,7 +32,7 @@ public class MongoDBController : ControllerBase
         test.FirstName = "Mike";
        test.LastName = "Johnson";
       
-        string connectionString = "mongodb://AdminJerick:Mixon9090!@192.168.3.139:27017/?authSource=admin";
+        string connectionString = "";
             string db = "TestDB";
             string cName = "user";
 
