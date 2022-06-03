@@ -6,13 +6,11 @@ namespace Backend.Modules;
 
 public class BlogPostModule {
     
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id {get;set;}
-    public string Author {get;set;} 
-    public string Title {get;set;} 
-    public DateTime DatePosted {get;set;}
-    public string BlogPost {get;set;} 
-    public int ThumbsUp {get;set;}
+    
+    //From
+    public string From {get;set;}
+
+    public string To {get;set;}
+    //To
 
 }

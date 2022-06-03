@@ -9,18 +9,11 @@ public class UserModule
 
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id {get;set;}
+    public string UserId {get;set;}
 
-
-    public Credidentials credidentials;
-    public class Credidentials 
-    {
-        [BsonRequired]
-        public string Email {get;set;}
-
-        [BsonRequired]
-        public string Password {get;set;}
-    }
+    public string Email {get;set;}
+    
+    public string Password {get;set;}
     
     public string FirstName {get;set;} 
 
