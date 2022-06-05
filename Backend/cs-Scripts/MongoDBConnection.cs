@@ -27,7 +27,7 @@ public class MongoDBConnection<T> :  IMongoDBConnection
     public IMongoCollection<T> collection;
     private string connectionString = "";
 
-    public MongoDBConnection( string _dbString,string _cNameString)
+    public MongoDBConnection(string _dbString,string _cNameString)
     {
         cNameString = _cNameString;
         dbString = _dbString;
