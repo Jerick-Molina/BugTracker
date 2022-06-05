@@ -11,8 +11,9 @@ A good example when it comes to System Design is to **Keep It Simple**. With my 
 What comes to my mind is: "What are the basic actions a user should be
 able to use, when it comes to using a bloglers' website?". The other is to always think in a High end user usage stand point ,as one of the importance of System design is *Scalability* at least keeping it basic.
 
-![[The Concept.png]]
-![[concept.png]]
+
+<img src="https://github.com/Jerick-Molina/profBlogger/blob/development/images(Readme)/concept.png" width="50%" height="50%">
+
 ### 2. Endpoints
 There's two types of EndPoints:
 
@@ -21,11 +22,12 @@ There's two types of EndPoints:
 2. Inner Endpoints
 	- Methods that cannot be modified in any way by the user (Backend) 
 
-![[profBlogger V2 (1).png]]
+
+<img src="https://github.com/Jerick-Molina/profBlogger/blob/development/images(Readme)/Endpoints.png" width="50%" height="50%">
 
 ### 3. The Database
 
 A NoSQL Mongo Db would be used for this project due to its fast 
 document data base using Horizontable scale-out architecture.
 
-![[db.png]]
+<img src="https://github.com/Jerick-Molina/profBlogger/blob/development/images(Readme)/db.png" width="50%" height="50%">
