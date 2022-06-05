@@ -31,3 +31,14 @@ A NoSQL Mongo Db would be used for this project due to its fast
 document data base using Horizontable scale-out architecture.
 
 <img src="https://github.com/Jerick-Molina/profBlogger/blob/development/images(Readme)/db.png" width="50%" height="50%">
+
+### 4 .The Diagram
+<img src="https://github.com/Jerick-Molina/profBlogger/blob/development/images(Readme)/Diagram.png" width="50%" height="50%">
+
+
+First Step would be the user Request to the *API Management* where the *API Management* would decide first if the user is Authenticated, if so it would then decide either the request is to write or to read.
+
+- Write: The write server would then write to the database.
+- Read: The *API Management* would go through a Load Balancer to decide what's the best route to decrease latency. Then the read server  would check if the request is in the *Redis cache*. If not it would look through the MongoDB and return the results.
+
+Reason why write server is simple is because the app is more focused on read than write. Most users would be reading rather than writing.
