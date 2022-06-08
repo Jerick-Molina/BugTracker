@@ -19,10 +19,7 @@ public class BlogController : ControllerBase
 {
       
 
-        string connectionString = "";
-        string db = "TestDB";
-        string cName = "user";
-
+   
    
 
     [HttpPost("Add")]

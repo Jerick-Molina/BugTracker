@@ -13,63 +13,22 @@ using MongoDB.Bson.Serialization.Attributes;
 using Backend.Interfaces;
 namespace Backend.csScripts;
 
-
-
-public class MongoDBConnection<T> :  IMongoDBConnection
+public  class MongoDBConnection<T> : IMongoDBConnection<T>
 {
-
-    private string cNameString;
-    private string dbString;
-
     private IMongoClient client;
-    public IMongoDatabase db;
-
+    private IMongoDatabase db;
     public IMongoCollection<T> collection;
-    private string connectionString = "";
+    string connectionString = "mongodb://AdminJerick:Mixon9090!@192.168.3.139:27017/?authSource=admin";
+  
+   
 
-    public MongoDBConnection(string _dbString,string _cNameString)
+    public  IMongoCollection<T> ReturnCollection(string dbName,string cName)
     {
-        cNameString = _cNameString;
-        dbString = _dbString;
-        
-        client = new MongoClient(connectionString);
-        db = client.GetDatabase(dbString);
-        collection = db.GetCollection<T>(cNameString);
-    }
-
-    //post_blogs
-    public async Task<IActionResult> PostBlogs(string user_id,
-    string post_id,string post_header,string post_body,DateTime date)
-    {
-        var r = await collection.FindAsync(_ => true);
-        return new OkObjectResult(r.ToList());
-    }
- //post_blogs
-    public async Task<IActionResult> EditBlogs(string user_id,string post_id)
-    {
-        var r = await collection.FindAsync(_ => true);
-        return new OkObjectResult(r.ToList());
-    }
-
-    //Delete Blogs
-    public async Task<IActionResult> DeleteBlogs(string user_id,string post_id)
-    {
-            var r = await collection.FindAsync(_ => true);
-            return new OkObjectResult(r.ToList());
-    }
-
-    //User Follow User
-    public async Task<IActionResult> Follow(string user_id_one,string user_id_two)
-    {
-         var r = await collection.FindAsync(_ => true);
-            return new OkObjectResult(r.ToList());
-    }
-    
-    //User Unfollow User
-   public async Task<IActionResult> UnFollow(string user_id_one,string user_id_two)
-    {
-         var r = await collection.FindAsync(_ => true);
-            return new OkObjectResult(r.ToList());
+        client =  new MongoClient(connectionString);
+        db = client.GetDatabase(dbName);
+        db.GetCollection<T>(cName);
+        return  db.GetCollection<T>(cName);
     }
 
 }
+

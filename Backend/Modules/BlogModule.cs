@@ -10,12 +10,14 @@ public class BlogModule
     
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string BlogId {get;set;}
+    public string BlogId {get;set;} = string.Empty;
     //Uses UserID
-    public UserModule Author{get;set;}
+   
+    public UserModule Author{get;set;} = new UserModule();
+       
     public DateTime Date {get;set;}
-    public string Title {get;set;}
-    public string Body {get;set;}
+    public string Title {get;set;} = string.Empty;
+    public string Body {get;set;} = string.Empty;
     public int ThumbsUp {get;set;}
 
 }

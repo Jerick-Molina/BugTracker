@@ -1,11 +1,28 @@
+using Backend.Databases;
+using Backend.csScripts;
+using Backend.Modules;
+using Backend.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+
+
 builder.Services.AddControllers();
+
+
+
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<IMongoDBConnection<UserModule>,MongoDBConnection<UserModule>>();
+builder.Services.AddSingleton<IUserDB,UserDB>();
+builder.Services.AddSingleton<IUserAccount,UserAccount>();
+
+
+
 
 var app = builder.Build();
 
