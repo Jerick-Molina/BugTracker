@@ -13,56 +13,115 @@ using MongoDB.Bson.Serialization.Attributes;
 using Backend.Interfaces;
 using Backend.csScripts;
 using Backend.Modules;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+
 namespace Backend.Databases;
 
 
 
+//NOTE CRUD OPERATIONS  besides *READ* needs authentication
 public class BlogDB :  IBlogDB
 {
 
      string dbName = "TestDB";
-     string cName = "Users";
+     string cName = "Blogs";
 
-    IMongoCollection<BlogModule> db;
-   
-    public BlogDB(IMongoDBConnection<BlogModule> _db){
-       // db = _db.ReturnCollection(dbName,cName);
+    BlogModule blog = new BlogModule();
+    IMongoCollection<BlogModule> collec;
+
+    IUserAccount acc;
+    public BlogDB(IMongoDBConnection<BlogModule> _dbConnect, IUserAccount _acc){
+
+
+      collec = _dbConnect.ReturnCollection(dbName,cName);
        
+      acc = _acc;
     }
-    
-    //post_blogs
-    public async Task<IActionResult> PostBlog(string user_id,
-    string post_id,string post_header,string post_body,DateTime date)
+
+    public async Task<IActionResult> PostBlog(ClaimsIdentity user,
+    BlogModule user_blog)
     {
-        var r = await db.FindAsync(_ => true);
-        return new OkObjectResult(r.ToList());
+         try{
+           if(user.Claims.First(c => c.Type == "UserId").Value != null)
+           {
+             blog.AuthorId = user.Claims.First(c => c.Type == "UserId").Value;
+             blog.Title = user_blog.Title;
+             blog.Body = user_blog.Body;
+             blog.Date = user_blog.Date;
+
+             await collec.InsertOneAsync(blog);
+              return new OkObjectResult("Document Inserted");
+           }else{
+              return new UnauthorizedObjectResult("UserIdNotValid");
+           }
+         }catch(Exception e)
+         {
+         return new OkObjectResult(e);
+         }
+      
     }
  //post_blogs
-    public async Task<IActionResult> EditBlog(string user_id,string post_id)
+   public async Task<IActionResult> ReadBlog(BlogModule blog)
     {
-        var r = await db.FindAsync(_ => true);
+           try{
+              var rBlog = await collec.Find(b => b.BlogId == blog.BlogId).FirstOrDefaultAsync<BlogModule>();
+
+               if(rBlog is null){
+                     return new UnauthorizedObjectResult("UnKnown blog");
+               }
+              return new OkObjectResult(rBlog);
+        
+         }catch(Exception e)
+         {
+         return new OkObjectResult(e.Message);
+         }
+    }
+    //post_blogs
+    //This will be finished once its UI compatable
+    public async Task<IActionResult> EditBlog(ClaimsIdentity user,BlogModule blog)
+    {
+         
+       try{
+           if(user.Claims.First(c => c.Type == "UserId").Value != null)
+           {
+             
+           
+
+            
+              return new OkObjectResult("Document Inserted");
+           }else{
+              return new UnauthorizedObjectResult("UserIdNotValid");
+           }
+       }catch(Exception e){
+            return new OkObjectResult(e.Message);
+       }
+        var r = await collec.FindAsync(_ => true);
         return new OkObjectResult(r.ToList());
     }
 
     //Delete Blogs
-    public async Task<IActionResult> DeleteBlog(string user_id,string post_id)
-    {
-            var r = await db.FindAsync(_ => true);
+    public async Task<IActionResult> DeleteBlog(ClaimsIdentity user,BlogModule blog)
+    { 
+       
+       try{
+         if(user.Claims.First(c => c.Type == "UserId").Value != null)
+           {
+             var userId = user.Claims.First(c => c.Type == "UserId").Value;
+             await collec.DeleteOneAsync(x => x.BlogId == blog.BlogId && x.AuthorId == userId);
+
+            
+              return new OkObjectResult("Document Deleted");
+           }else{
+              return new UnauthorizedObjectResult("UserIdNotValid");
+           }
+       }catch(Exception e){
+            return new OkObjectResult(e.Message);
+       }
+            var r = await collec.FindAsync(_ => true);
             return new OkObjectResult(r.ToList());
     }
 
-    //User Follow User
-    public async Task<IActionResult> Follow(string user_id_one,string user_id_two)
-    {
-         var r = await db.FindAsync(_ => true);
-            return new OkObjectResult(r.ToList());
-    }
-    
-    //User Unfollow User
-   public async Task<IActionResult> UnFollow(string user_id_one,string user_id_two)
-    {
-         var r = await db.FindAsync(_ => true);
-            return new OkObjectResult(r.ToList());
-    }
+  
 
 }

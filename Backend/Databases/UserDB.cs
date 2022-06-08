@@ -81,7 +81,7 @@ public class UserDB : IUserDB
             if(!acc.PasswordAuthentication(user.Password, userExist.Password)){
                  return new UnauthorizedObjectResult("Credidentials invalid");
              }else{
-                  return new OkObjectResult("Signed in!");
+                  return new OkObjectResult(acc.GenerateJwtToken(userExist));
              }
         }else
         {
@@ -92,7 +92,23 @@ public class UserDB : IUserDB
 
             //Log
 
-            return new UnauthorizedObjectResult(e);
+            return new UnauthorizedObjectResult(e.Message);
         }
+    }
+
+
+    //Last feature to do.
+      //User Follow User
+    public async Task<IActionResult> Follow(string user_id_one,string user_id_two)
+    {
+         var r = await collec.FindAsync(x => true);
+            return new OkObjectResult(r.ToList());
+    }
+    
+    //User Unfollow User
+   public async Task<IActionResult> UnFollow(string user_id_one,string user_id_two)
+    {
+         var r = await collec.FindAsync(_ => true);
+            return new OkObjectResult(r.ToList());
     }
 }

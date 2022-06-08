@@ -15,6 +15,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{
+    options.TokenValidationParameters = new TokenValidationParameters{
+        ValidateIssuer = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidateAudience = false,
+        ValidIssuer = "https://localhost:7235",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("4zljz0npg5c9bmm5"))
+    };
+});
 
 
 
@@ -22,19 +32,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IMongoDBConnection<UserModule>,MongoDBConnection<UserModule>>();
+builder.Services.AddSingleton<IMongoDBConnection<BlogModule>,MongoDBConnection<BlogModule>>();
 builder.Services.AddSingleton<IUserDB,UserDB>();
+builder.Services.AddSingleton<IBlogDB,BlogDB>();
 builder.Services.AddSingleton<IUserAccount,UserAccount>();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{
-    options.TokenValidationParameters = new TokenValidationParameters(){
-       // ValidateActor = true
-       ValidateAudience = true,
-       ValidateLifetime = true,
-       ValidateIssuerSigningKey = true,
-       ValidIssuer = "",
-       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(""))
 
-    };
-});
 
 
 

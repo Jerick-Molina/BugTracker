@@ -13,7 +13,7 @@ public class BlogModule
     public string BlogId {get;set;} = string.Empty;
     //Uses UserID
    
-    public UserModule Author{get;set;} = new UserModule();
+    public string AuthorId{get;set;} = string.Empty;
        
     public DateTime Date {get;set;}
     public string Title {get;set;} = string.Empty;

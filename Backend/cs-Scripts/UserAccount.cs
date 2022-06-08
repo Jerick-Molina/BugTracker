@@ -27,21 +27,28 @@ public class UserAccount : IUserAccount
 {
     public string GenerateJwtToken(UserModule user)
     {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(""));
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("4zljz0npg5c9bmm5"));
         var credidentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[] {
-            new Claim("UserId", user.UserId)
+            var claims = new[] {
+            new Claim("UserId", user.UserId),
+            new Claim("UserPass",user.Password),
+            new Claim("FirstName", user.FirstName),
+            new Claim("LastName",user.Password)
+            };
+        var token = new SecurityTokenDescriptor{
+            Issuer = "https://localhost:7235",
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddHours(3),
+            SigningCredentials = credidentials
         };
-        var token = new JwtSecurityToken(
-            null,
-            null,
-            claims,
-            expires: DateTime.Now.AddMinutes(10),
-            signingCredentials: credidentials
-        );
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        var t = tokenHandler.CreateToken(token);
+
+        
+        return tokenHandler.WriteToken(t);
     }
 
  

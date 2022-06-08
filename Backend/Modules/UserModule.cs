@@ -9,6 +9,7 @@ public class UserModule
 { 
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
+    [BsonElement("UserId")]
     public string? UserId {get;set;} 
 
    
