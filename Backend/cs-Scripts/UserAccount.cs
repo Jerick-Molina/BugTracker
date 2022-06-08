@@ -16,22 +16,35 @@ using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 using Backend.csScripts;
 using Backend.Modules;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Backend.csScripts;
 
 
 public class UserAccount : IUserAccount
 {
+    public string GenerateJwtToken(UserModule user)
+    {
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(""));
+        var credidentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+        var claims = new[] {
+            new Claim("UserId", user.UserId)
+        };
+        var token = new JwtSecurityToken(
+            null,
+            null,
+            claims,
+            expires: DateTime.Now.AddMinutes(10),
+            signingCredentials: credidentials
+        );
 
-    public bool IsEmpty(UserModule user){
-
-
-        
-
-        return false;
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
-  
+
+ 
     //Hash
     public string HashPassword(string password)
     {
