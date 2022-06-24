@@ -1,4 +1,13 @@
 
-/backend/.vscode
-/backend/obj
+<<<<<<< HEAD
+Backend/.vscode/
+Backend/obj/
+.obsidian/
+=======
+Backend/.vscode
+Backend/obj
+.obsidian
+Backend/mongpass.txt
+Backend/MongoDB.json
 
+>>>>>>> 79f6ad1 (Added CreateAccount && Login)

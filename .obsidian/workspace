@@ -1,0 +1,101 @@
+{
+  "main": {
+    "id": "cf3c8a45286b0e23",
+    "type": "split",
+    "children": [
+      {
+        "id": "83df84a33c72e0db",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "README.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "c057ceb54cbe8f44",
+    "type": "split",
+    "children": [
+      {
+        "id": "efd02683ca26211e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a3a6f5c4fdee94b4",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "c6bf98b9bad4ceca",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "de564001c8f00183",
+    "type": "split",
+    "children": [
+      {
+        "id": "b07841ecedec429a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "aaa64dc3df8db682",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "README.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "83df84a33c72e0db",
+  "lastOpenFiles": [
+    "README.md",
+    "The Concept.png.md",
+    "images(Readme)/profBlogger V2 (1).png",
+    "images(Readme)/profBlogger (4).png",
+    "images(Readme)/Endpoints.png",
+    "images(Readme)/concept.png",
+    "images(Readme)/The Concept.png",
+    "Pasted image 20220604163328.png"
+  ]
+}

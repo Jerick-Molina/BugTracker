@@ -42,3 +42,14 @@
 /home/jerick/Desktop/profBlogging/Backend/obj/Debug/net6.0/Backend.pdb
 /home/jerick/Desktop/profBlogging/Backend/obj/Debug/net6.0/Backend.genruntimeconfig.cache
 /home/jerick/Desktop/profBlogging/Backend/obj/Debug/net6.0/ref/Backend.dll
+/home/jerick/Desktop/profBlogging/Backend/bin/Debug/net6.0/MongoDB.json
+/home/jerick/Desktop/profBlogging/Backend/bin/Debug/net6.0/Microsoft.AspNetCore.JsonPatch.dll
+/home/jerick/Desktop/profBlogging/Backend/bin/Debug/net6.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+/home/jerick/Desktop/profBlogging/Backend/bin/Debug/net6.0/Newtonsoft.Json.Bson.dll
+/home/jerick/Desktop/profBlogging/Backend/bin/Debug/net6.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/jerick/Desktop/profBlogging/Backend/bin/Debug/net6.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/home/jerick/Desktop/profBlogging/Backend/bin/Debug/net6.0/Microsoft.IdentityModel.Logging.dll
+/home/jerick/Desktop/profBlogging/Backend/bin/Debug/net6.0/Microsoft.IdentityModel.Protocols.dll
+/home/jerick/Desktop/profBlogging/Backend/bin/Debug/net6.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/home/jerick/Desktop/profBlogging/Backend/bin/Debug/net6.0/Microsoft.IdentityModel.Tokens.dll
+/home/jerick/Desktop/profBlogging/Backend/bin/Debug/net6.0/System.IdentityModel.Tokens.Jwt.dll
