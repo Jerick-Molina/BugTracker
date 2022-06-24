@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-
+var MyCORS = "_myCORS";
 
 builder.Services.AddControllers();
 
@@ -31,13 +31,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddSingleton<IMongoDBConnection<UserModule>,MongoDBConnection<UserModule>>();
 builder.Services.AddSingleton<IMongoDBConnection<BlogModule>,MongoDBConnection<BlogModule>>();
+builder.Services.AddSingleton<IMongoDBConnection<SubcriberModule>,MongoDBConnection<SubcriberModule>>();
 builder.Services.AddSingleton<IUserDB,UserDB>();
+builder.Services.AddSingleton<ISubcriberDB,SubcriberDB>();
 builder.Services.AddSingleton<IBlogDB,BlogDB>();
 builder.Services.AddSingleton<IUserAccount,UserAccount>();
 
-
+builder.Services.AddCors(options => {
+    options.AddPolicy(name: MyCORS,policy => {
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader();
+        
+    });
+});
 
 
 var app = builder.Build();
@@ -49,7 +57,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     
 }
-
+app.UseCors(MyCORS);
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

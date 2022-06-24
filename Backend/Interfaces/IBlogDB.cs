@@ -9,12 +9,13 @@ namespace Backend.Interfaces;
 
 public interface IBlogDB {
 
-  Task<IActionResult> ReadBlog(BlogModule blog);
+  Task<List<BlogModule>> GetBlogs(string userID);
+  Task<IActionResult> ReadBlog(string blogId);
   Task<IActionResult> PostBlog(ClaimsIdentity user,
     BlogModule user_blog);
   
   Task<IActionResult> EditBlog(ClaimsIdentity user,BlogModule blog);
 
-  Task<IActionResult> DeleteBlog(ClaimsIdentity user,BlogModule blog);
+  Task<IActionResult> DeleteBlog(ClaimsIdentity user,string blogId);
 
 }

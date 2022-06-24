@@ -9,4 +9,6 @@ public interface IUserAccount
     string GenerateJwtToken(UserModule user);
     string HashPassword(string password);
     bool PasswordAuthentication(string password, string hashed);
+
+    UserModule ReadJwtToken(string _token);
 }

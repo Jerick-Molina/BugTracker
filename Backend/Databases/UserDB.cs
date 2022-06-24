@@ -19,7 +19,7 @@ namespace Backend.Databases;
 
 public class UserDB : IUserDB
 {
-    static string dbName = "TestDB";
+    static string dbName = "Account";
     static string cName = "Users";
 
     
@@ -27,12 +27,18 @@ public class UserDB : IUserDB
 
     IUserAccount acc;
 
-    public UserDB(IMongoDBConnection<UserModule> _dbConnect, IUserAccount _acc)
+    ISubcriberDB subDB;
+
+    IBlogDB blogDB;
+
+    public UserDB(IMongoDBConnection<UserModule> _dbConnect,IUserAccount _acc,ISubcriberDB _subDB, IBlogDB _blogDB)
     {
 
-        collec = _dbConnect.ReturnCollection("TestDB","Users");
+        collec = _dbConnect.ReturnCollection(dbName,cName);
 
         acc = _acc;
+        subDB = _subDB;
+        blogDB = _blogDB;
     }
    
     public async Task<IActionResult> CreateAccount(UserModule user)
@@ -50,10 +56,19 @@ public class UserDB : IUserDB
                 //if user doesn't exist hash password then create account
                 user.Password = acc.HashPassword(user.Password.ToString());
                 await collec.InsertOneAsync(user);
-
+                
+                //After user is created AutoFollow
+                var createdUser = await collec.Find(x => x.UserId == user.UserId).FirstOrDefaultAsync<UserModule>();
+                var otherUsers = await collec.FindAsync(x => x.UserId != user.UserId);
+                if(otherUsers != null){
+                foreach(var _oUser in otherUsers.ToList()){
+                   await subDB.Follow(createdUser.UserId,_oUser.UserId);
+                    }
+                }
+               
                 //Give AuthToken
 
-                return new OkObjectResult("Account Created");
+                return new OkObjectResult(acc.GenerateJwtToken(user));
                 }else{
                     return new UnauthorizedObjectResult("Email exist already!");
                 }
@@ -99,16 +114,59 @@ public class UserDB : IUserDB
 
     //Last feature to do.
       //User Follow User
-    public async Task<IActionResult> Follow(string user_id_one,string user_id_two)
-    {
-         var r = await collec.FindAsync(x => true);
-            return new OkObjectResult(r.ToList());
+    public async Task<Object[]> Profile(string userId){
+
+        List<UserModule> subcribed = new List<UserModule>();
+        List<BlogModule> blogs = new List<BlogModule>();
+     
+            try{
+                //Get user subcribed then get blogs
+                List<SubcriberModule> tempSub   = await subDB.GetSubcribed(userId);
+            
+
+                if(tempSub != null){
+                     foreach(var _user in tempSub){
+                     List<BlogModule> tempBlog = await blogDB.GetBlogs(_user.Subcribed);
+                    var u = await collec.Find(x => x.UserId == _user.Subcribed).FirstOrDefaultAsync();
+                   
+                    subcribed.Add(new UserModule(){
+                        FirstName = u.FirstName,
+                        LastName = u.LastName,
+                        UserId = u.UserId
+                    });
+                        if(tempBlog != null){
+                            foreach(var blog in tempBlog){
+                                blogs.Add(blog);
+                            }
+                        }
+                    //Now check if main user has any post
+
+                      
+                    }
+                      List<BlogModule> userBlogs = await blogDB.GetBlogs(userId);
+                    var myUser = await collec.Find(x => x.UserId == userId).FirstOrDefaultAsync();
+                        if(userBlogs != null){
+                             foreach(var blog in userBlogs){
+                                blogs.Add(blog);
+                            }
+                        }
+                     object[] result =  {subcribed,blogs,new UserModule(){
+                        FirstName = myUser.FirstName,
+                        LastName = myUser.LastName,
+                        UserId = myUser.UserId
+                     }};
+                     return result;
+                }else{
+                    return null;
+                }
+               
+            
+            
+            }catch(Exception e){
+
+                return null;
+            }
+
     }
-    
-    //User Unfollow User
-   public async Task<IActionResult> UnFollow(string user_id_one,string user_id_two)
-    {
-         var r = await collec.FindAsync(_ => true);
-            return new OkObjectResult(r.ToList());
-    }
+
 }

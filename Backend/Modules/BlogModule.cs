@@ -17,7 +17,9 @@ public class BlogModule
        
     public DateTime Date {get;set;}
     public string Title {get;set;} = string.Empty;
+
+    public string SubTitle {get;set;} = string.Empty;
     public string Body {get;set;} = string.Empty;
-    public int ThumbsUp {get;set;}
+    public int Hearts {get;set;}
 
 }

@@ -24,7 +24,10 @@ namespace Backend.csScripts;
 
 
 public class UserAccount : IUserAccount
-{
+{   
+
+    
+
     public string GenerateJwtToken(UserModule user)
     {
 
@@ -36,7 +39,7 @@ public class UserAccount : IUserAccount
             new Claim("UserId", user.UserId),
             new Claim("UserPass",user.Password),
             new Claim("FirstName", user.FirstName),
-            new Claim("LastName",user.Password)
+            new Claim("LastName",user.LastName)
             };
         var token = new SecurityTokenDescriptor{
             Issuer = "https://localhost:7235",
@@ -51,6 +54,18 @@ public class UserAccount : IUserAccount
         return tokenHandler.WriteToken(t);
     }
 
+    public UserModule ReadJwtToken(string _token){
+
+    var token = _token;  
+    var handler = new JwtSecurityTokenHandler();
+    var jwtSecurityToken = handler.ReadJwtToken(token);
+   
+    UserModule user = new UserModule();
+    user.UserId = jwtSecurityToken.Claims.First(c => c.Type == "UserId").Value;
+    user.FirstName =  jwtSecurityToken.Claims.First(c => c.Type == "FirstName").Value;
+    user.LastName = jwtSecurityToken.Claims.First(c => c.Type == "LastName").Value;
+        return user;
+    }
  
     //Hash
     public string HashPassword(string password)

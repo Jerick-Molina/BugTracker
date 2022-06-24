@@ -29,14 +29,14 @@ public class BlogController : ControllerBase
         db = _db;
     }
    
-     [HttpGet("Read")]
+    [HttpGet("Read")]
     [AllowAnonymous]
-    public async Task<IActionResult> blogs_read([FromBody]BlogModule blog){
+    public async Task<IActionResult> blogs_read([FromHeader] string blogId){
 
-        if(blog.BlogId is null){
+        if(blogId is null){
             return new UnauthorizedObjectResult("Nill");
         }
-       var r = await db.ReadBlog(blog);
+       var r = await db.ReadBlog(blogId);
         return new OkObjectResult(r); 
     }
     [HttpPost("Add")]
@@ -49,33 +49,31 @@ public class BlogController : ControllerBase
             return new UnauthorizedObjectResult("UnAuthorized");
         }
 
-        await db.PostBlog(identity,blog);
-        return new OkObjectResult("added a post"); 
+        var r = await db.PostBlog(identity,blog);
+        return new OkObjectResult(r); 
     }
     [HttpPost("Delete")]
-
-    public async Task<IActionResult> blogs_delete([FromBody]BlogModule blog){
+    [Authorize]
+    public async Task<IActionResult> blogs_delete([FromHeader]string blogId){
         var identity = HttpContext.User.Identity as ClaimsIdentity;
         if(identity is null){
             return new UnauthorizedObjectResult("UnAuthorized");
         }
-        await db.DeleteBlog(identity,blog);
         
-        return new OkObjectResult("deleted post"); 
+       var r = await db.DeleteBlog(identity,blogId);
+        
+        return new OkObjectResult(r); 
     }
     [HttpPost("Edit")]
-
-    public async Task<IActionResult> blogs_edit(){
-
-        return new OkObjectResult("edit"); 
-    }
-
-    [HttpGet("Home")]
     [Authorize]
-    public async Task<IActionResult> Home()
-    {
-          
-            return new OkObjectResult("Test"); 
+    public async Task<IActionResult> blogs_edit([FromBody]BlogModule blog){
+        
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        if(identity is null){
+            return new UnauthorizedObjectResult("UnAuthorized");
+        }
+        var r = db.EditBlog(identity,blog);
+        return new OkObjectResult(r); 
     }
-    
+
 }

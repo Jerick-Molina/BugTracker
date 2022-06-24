@@ -31,14 +31,28 @@ public class BlogDB :  IBlogDB
     IMongoCollection<BlogModule> collec;
 
     IUserAccount acc;
+
     public BlogDB(IMongoDBConnection<BlogModule> _dbConnect, IUserAccount _acc){
 
 
       collec = _dbConnect.ReturnCollection(dbName,cName);
        
       acc = _acc;
-    }
 
+    }
+   public async Task<List<BlogModule>> GetBlogs(string userID){
+      try{
+           var r = await collec.FindAsync(x => x.AuthorId == userID );
+
+           if(r == null){
+            return null;
+           }
+           return r.ToList();
+         }catch(Exception e)
+         {
+         return null;
+         }
+   }
     public async Task<IActionResult> PostBlog(ClaimsIdentity user,
     BlogModule user_blog)
     {
@@ -47,13 +61,14 @@ public class BlogDB :  IBlogDB
            {
              blog.AuthorId = user.Claims.First(c => c.Type == "UserId").Value;
              blog.Title = user_blog.Title;
+             blog.SubTitle = user_blog.SubTitle;
              blog.Body = user_blog.Body;
              blog.Date = user_blog.Date;
-
+            
              await collec.InsertOneAsync(blog);
               return new OkObjectResult("Document Inserted");
            }else{
-              return new UnauthorizedObjectResult("UserIdNotValid");
+              return new UnauthorizedObjectResult("UserIdNotValid"); 
            }
          }catch(Exception e)
          {
@@ -62,13 +77,13 @@ public class BlogDB :  IBlogDB
       
     }
  //post_blogs
-   public async Task<IActionResult> ReadBlog(BlogModule blog)
+   public async Task<IActionResult> ReadBlog(string blogId)
     {
            try{
-              var rBlog = await collec.Find(b => b.BlogId == blog.BlogId).FirstOrDefaultAsync<BlogModule>();
+              var rBlog = await collec.Find(b => b.BlogId == blogId).FirstOrDefaultAsync<BlogModule>();
 
                if(rBlog is null){
-                     return new UnauthorizedObjectResult("UnKnown blog");
+                     return new UnauthorizedObjectResult("Unknown blog");
                }
               return new OkObjectResult(rBlog);
         
@@ -79,38 +94,45 @@ public class BlogDB :  IBlogDB
     }
     //post_blogs
     //This will be finished once its UI compatable
-    public async Task<IActionResult> EditBlog(ClaimsIdentity user,BlogModule blog)
+    public async Task<IActionResult> EditBlog(ClaimsIdentity user,BlogModule blog )
     {
          
        try{
            if(user.Claims.First(c => c.Type == "UserId").Value != null)
            {
-             
-           
-
+              if(user.Claims.First(c => c.Type == "UserId").Value != null)
+           {
+             var userId = user.Claims.First(c => c.Type == "UserId").Value;
+               Console.WriteLine(blog.BlogId);
+               Console.WriteLine(blog.AuthorId);
+              await collec.DeleteOneAsync(x => x.BlogId == blog.BlogId && x.AuthorId == userId);
             
-              return new OkObjectResult("Document Inserted");
+             await collec.InsertOneAsync(blog);
+             
+              return new OkObjectResult("Document Deleted");
+           }else{
+              return new UnauthorizedObjectResult("UserIdNotValid");
+           }
            }else{
               return new UnauthorizedObjectResult("UserIdNotValid");
            }
        }catch(Exception e){
             return new OkObjectResult(e.Message);
        }
-        var r = await collec.FindAsync(_ => true);
-        return new OkObjectResult(r.ToList());
+       
     }
 
     //Delete Blogs
-    public async Task<IActionResult> DeleteBlog(ClaimsIdentity user,BlogModule blog)
+    public async Task<IActionResult> DeleteBlog(ClaimsIdentity user,string blogId)
     { 
        
        try{
          if(user.Claims.First(c => c.Type == "UserId").Value != null)
            {
              var userId = user.Claims.First(c => c.Type == "UserId").Value;
-             await collec.DeleteOneAsync(x => x.BlogId == blog.BlogId && x.AuthorId == userId);
+             await collec.DeleteOneAsync(x => x.BlogId == blogId && x.AuthorId == userId);
 
-            
+             
               return new OkObjectResult("Document Deleted");
            }else{
               return new UnauthorizedObjectResult("UserIdNotValid");
