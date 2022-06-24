@@ -40,7 +40,7 @@ public class BlogController : ControllerBase
         return new OkObjectResult(r); 
     }
     [HttpPost("Add")]
-
+     [Authorize]
     public async Task<IActionResult> blogs_add([FromBody]BlogModule blog){
 
         var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -72,7 +72,7 @@ public class BlogController : ControllerBase
         if(identity is null){
             return new UnauthorizedObjectResult("UnAuthorized");
         }
-        var r = db.EditBlog(identity,blog);
+        var r = await  db.EditBlog(identity,blog);
         return new OkObjectResult(r); 
     }
 
