@@ -7,6 +7,6 @@ namespace Backend.Interfaces;
 public interface IMongoDBConnection<T> {
    
 
-  public IMongoCollection<T> ReturnCollection(string dbName,string cName);
+  public IMongoCollection<T> ReturnCollection(IMongoClient client,string dbName,string cName);
    
 }

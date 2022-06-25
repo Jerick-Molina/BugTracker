@@ -31,10 +31,12 @@ public class UserDB : IUserDB
 
     IBlogDB blogDB;
 
-    public UserDB(IMongoDBConnection<UserModule> _dbConnect,IUserAccount _acc,ISubcriberDB _subDB, IBlogDB _blogDB)
+
+
+    public UserDB(IMongoClient mongoClient,IMongoDBConnection<UserModule> _dbConnect,IUserAccount _acc,ISubcriberDB _subDB, IBlogDB _blogDB)
     {
 
-        collec = _dbConnect.ReturnCollection(dbName,cName);
+        collec = _dbConnect.ReturnCollection(mongoClient,dbName,cName);
 
         acc = _acc;
         subDB = _subDB;

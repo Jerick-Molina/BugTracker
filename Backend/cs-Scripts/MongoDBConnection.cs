@@ -15,16 +15,15 @@ namespace Backend.csScripts;
 
 public  class MongoDBConnection<T> : IMongoDBConnection<T>
 {
-    private IMongoClient client;
+
     private IMongoDatabase db;
     public IMongoCollection<T> collection;
-    string connectionString = "mongodb://AdminJerick:Mixon9090!@192.168.3.139:27017/?authSource=admin";
-  
-   
 
-    public  IMongoCollection<T> ReturnCollection(string dbName,string cName)
+    
+
+    public IMongoCollection<T> ReturnCollection(IMongoClient client,string dbName,string cName)
     {
-        client =  new MongoClient(connectionString);
+       
         db = client.GetDatabase(dbName);
         db.GetCollection<T>(cName);
         return  db.GetCollection<T>(cName);
