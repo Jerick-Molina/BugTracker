@@ -26,13 +26,16 @@ namespace Backend.csScripts;
 public class UserAccount : IUserAccount
 {   
 
-    
-
+    private readonly JwtSettings jwt;
+    public UserAccount(JwtSettings _jwt)
+    {
+        jwt = _jwt;
+    }
     public string GenerateJwtToken(UserModule user)
     {
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("4zljz0npg5c9bmm5"));
+        var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwt.Key));
         var credidentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[] {
@@ -42,9 +45,9 @@ public class UserAccount : IUserAccount
             new Claim("LastName",user.LastName)
             };
         var token = new SecurityTokenDescriptor{
-            Issuer = "https://localhost:7235",
+            Issuer = jwt.Issuer,
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddHours(3),
+            Expires = DateTime.UtcNow.AddHours(10),
             SigningCredentials = credidentials
         };
 

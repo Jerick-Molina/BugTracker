@@ -32,10 +32,10 @@ public class BlogDB :  IBlogDB
 
     IUserAccount acc;
 
-    public BlogDB(IMongoDBConnection<BlogModule> _dbConnect, IUserAccount _acc){
+    public BlogDB(IMongoClient mongoClient, IMongoDBConnection<BlogModule> _dbConnect, IUserAccount _acc){
 
 
-      collec = _dbConnect.ReturnCollection(dbName,cName);
+      collec = _dbConnect.ReturnCollection(mongoClient,dbName,cName);
        
       acc = _acc;
 

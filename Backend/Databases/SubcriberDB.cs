@@ -29,39 +29,15 @@ public class SubcriberDB : ISubcriberDB
   
 
    
-    public SubcriberDB(IMongoDBConnection<SubcriberModule> _dbConnect, IUserAccount _acc)
+    public SubcriberDB(IMongoClient mongoClient,IMongoDBConnection<SubcriberModule> _dbConnect, IUserAccount _acc)
     {
 
-        collec = _dbConnect.ReturnCollection(dbName, cName);
+        collec = _dbConnect.ReturnCollection(mongoClient,dbName, cName);
 
         acc = _acc;
         
     }
-//  public async Task<IActionResult> GetSubcribedFeed(string token)
-//     {
 
-//         try{
-//         List<BlogDB> subcribedBlogs = new List<BlogDB>();
-//         var subcriber = acc.ReadJwtToken(token);
-//         var subcribed = await collec.FindAsync(x => x.Subcribed == subcriber.UserId);
-
-        
-//         foreach (var s in subcribed.ToList())
-//         {            
-//             var r = blogDB.GetUserBlogs(s.Subcribed);
-//             if(r.Result as UserModule == null){
-//                 return new OkObjectResult("No Results");
-//             }else{
-//                 subcribedBlogs.Add(r.Result as BlogDB);
-//             }
-            
-//         }
-//            return new OkObjectResult(subcribedBlogs);
-//         }catch(Exception e ){
-//          return new UnauthorizedObjectResult(e.Data);
-//         }
-     
-//     }
     public async Task<List<SubcriberModule>> GetSubcribed(string _userId)
     {
 

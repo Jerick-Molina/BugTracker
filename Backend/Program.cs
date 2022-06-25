@@ -5,6 +5,7 @@ using Backend.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton(builder.Configuration.GetSection("Jwt").Get<JwtSettings>());
+builder.Services.AddSingleton<IMongoClient>(serviceProvider => {
+    
+    var settings =  builder.Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
 
+    return new MongoClient(settings.ConnectionString);
+});
 builder.Services.AddSingleton<IMongoDBConnection<UserModule>,MongoDBConnection<UserModule>>();
 builder.Services.AddSingleton<IMongoDBConnection<BlogModule>,MongoDBConnection<BlogModule>>();
 builder.Services.AddSingleton<IMongoDBConnection<SubcriberModule>,MongoDBConnection<SubcriberModule>>();
@@ -47,6 +54,7 @@ builder.Services.AddCors(options => {
     });
 });
 
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -58,7 +66,13 @@ if (app.Environment.IsDevelopment())
     
 }
 app.UseCors(MyCORS);
-app.UseHttpsRedirection();
+if(app.Environment.IsDevelopment()){
+    app.UseHttpsRedirection();
+}
+
+app.UseEndpoints(endpoints =>{
+    endpoints.MapHealthChecks("/healths");
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
